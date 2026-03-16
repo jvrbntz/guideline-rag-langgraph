@@ -14,7 +14,15 @@ wheels/
 vector_store/
 
 # Data
-data/
+data/*.pdf
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
 
 # OS
 .DS_Store
