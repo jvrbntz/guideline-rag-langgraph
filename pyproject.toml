@@ -1,0 +1,22 @@
+[project]
+name = "guideline-rag-langgraph"
+version = "0.1.0"
+description = "LangGraph-based RAG system for querying the ATS/IDSA 2019 CAP clinical guideline"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Javier Benitez" },
+]
+dependencies = [
+    "langchain>=1.2.12",
+    "langchain-chroma>=1.1.0",
+    "langchain-community>=0.4.1",
+    "langchain-ollama>=1.0.1",
+    "langgraph>=1.1.2",
+    "pypdf>=6.9.0",
+    "python-dotenv>=1.2.2",
+]
+
+[project.urls]
+Repository = "https://github.com/jvrbntz/guideline-rag-langgraph"
