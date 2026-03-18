@@ -553,7 +553,6 @@ dependencies = [
     { name = "langgraph" },
     { name = "pypdf" },
     { name = "python-dotenv" },
-    { name = "tqdm" },
 ]
 
 [package.metadata]
@@ -565,7 +564,6 @@ requires-dist = [
     { name = "langgraph", specifier = ">=1.1.2" },
     { name = "pypdf", specifier = ">=6.9.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
-    { name = "tqdm", specifier = ">=4.67.3" },
 ]
 
 [[package]]

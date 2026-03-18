@@ -5,7 +5,7 @@ The PDF required to run this project is not included in this repository. Please 
 ## Required file
 
 **Metlay JP, Waterer GW, Long AC, et al.**
-*Diagnosis and Treatment of Adults with Community-Acquired Pneumonia.*
+_Diagnosis and Treatment of Adults with Community-Acquired Pneumonia._
 American Journal of Respiratory and Critical Care Medicine. 2019;200(7):e45–e67.
 https://doi.org/10.1164/rccm.201908-1581ST
 
@@ -22,3 +22,7 @@ metlay-et-al-2019-diagnosis-and-treatment-of-adults-with-community-acquired-pneu
 4. Place it in this `data/` directory
 
 The system will not run without this file.
+
+## Document structure and extraction notes
+
+The source document is a 23-page clinical practice guideline published in a multi-column journal format, organized around 16 clinical questions each containing a recommendation statement, summary of evidence, rationale for the recommendation, and research needed in this area. Sections vary considerably in length. Several tables distributed across the document consolidate treatment recommendations by patient category and risk factor, with clinically important dosing details carried in table footnotes. These structural features create predictable extraction risks with standard PDF text extraction libraries: multi-column layouts are frequently read across columns rather than down each column, table row-column relationships may be lost during serialization, and footnote content may be separated from the table it annotates. Additional noise sources include repeated page footer text on every page and inline citation numbers embedded throughout the body text. Some clinical questions also require synthesizing information from multiple non-adjacent sections, meaning a single retrieved chunk is unlikely to contain a complete answer. A systematic analysis of actual extraction output and its downstream effects on retrieval quality is planned for V2.
