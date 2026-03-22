@@ -29,4 +29,10 @@ The source document is a 23-page clinical practice guideline published in a mult
 
 ## Other files in this directory
 
-`test_questions.md` — 12-question evaluation set developed using Claude as a thinking partner, with clinical reasoning and ground truth answers verified against the source document. Each entry includes the clinical question, expected answer, evidence strength, source location, and a note on what clinical reasoning capability the question tests.
+`test_questions.md` — 12-question evaluation set developed using Claude as a thinking partner, with clinical reasoning and ground truth answers verified against the source document. Each entry includes the clinical question, expected answer, evidence strength, source location, and a note on what clinical reasoning capability the question tests. This is the source of truth for the evaluation dataset.
+
+`test_questions.json` — generated from `test_questions.md` by running `prepare_eval_dataset.py`. This file is committed to the repository for convenience — a fresh clone does not require running the conversion script before running `evaluate.py`. If you modify `test_questions.md`, regenerate this file by running:
+
+​```
+uv run python prepare_eval_dataset.py
+​```
