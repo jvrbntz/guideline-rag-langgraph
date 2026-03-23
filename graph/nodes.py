@@ -8,8 +8,8 @@ Nodes: retrieve, grade_documents, generate
 from typing import Literal
 
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import ChatOllama, OllamaEmbeddings
 from pydantic import BaseModel, Field
 
 import config
@@ -121,7 +121,9 @@ def grade_documents(state: GraphState) -> dict:
     filtered_documents = []
 
     for doc in documents:
-        grade = _get_grading_chain().invoke({"query": query, "document": doc.page_content})
+        grade = _get_grading_chain().invoke(
+            {"query": query, "document": doc.page_content}
+        )
         if grade.relevant == "yes":
             filtered_documents.append(doc)
 
@@ -150,4 +152,15 @@ def generate(state: GraphState) -> dict:
 
     response = _get_generation_chain().invoke({"query": query, "context": context_text})
 
-    return {"answer": response.content}
+    if filtered_docs:
+        sources = []
+        for doc in filtered_docs:
+            source = doc.metadata.get("source", "unknown")
+            page = doc.metadata.get("page", "unknown")
+            sources.append(f"- {source} | Page {page}")
+        sources_text = "\n".join(sources)
+        answer_with_sources = f"{response.content}\n\nSources:\n{sources_text}"
+    else:
+        answer_with_sources = response.content
+
+    return {"answer": answer_with_sources}

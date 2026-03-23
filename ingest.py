@@ -10,16 +10,16 @@ Usage:
     uv run python ingest.py
 """
 
+import shutil
 from pathlib import Path
 
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
-from langchain_ollama import OllamaEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import config
-
 
 load_dotenv()
 
@@ -28,6 +28,9 @@ def load_pdf(pdf_path: Path) -> list:
     """Load PDF and return list of LangChain Documents, one per page."""
     loader = PyPDFLoader(str(pdf_path))
     documents = loader.load()
+    documents = documents[: config.PDF_CONTENT_PAGES]
+    for doc in documents:  # add here
+        doc.metadata["source"] = Path(doc.metadata["source"]).name
     print(f"Loaded {len(documents)} pages from {pdf_path.name}")
     return documents
 
@@ -43,7 +46,12 @@ def chunk_documents(documents: list) -> list:
 
 
 def build_vector_store(chunks: list) -> Chroma:
-    """Embed chunks and persist to ChromaDB"""
+    """Embed chunks and persist to ChromaDB.
+
+    Wipes any existing collection before ingesting to prevent duplicates.
+    """
+    if config.CHROMA_DB_PATH.exists():
+        shutil.rmtree(config.CHROMA_DB_PATH)
     config.CHROMA_DB_PATH.mkdir(parents=True, exist_ok=True)
 
     embeddings = OllamaEmbeddings(model=config.OLLAMA_EMBED_MODEL)
