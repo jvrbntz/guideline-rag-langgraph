@@ -29,7 +29,7 @@ def load_pdf(pdf_path: Path) -> list:
     loader = PyPDFLoader(str(pdf_path))
     documents = loader.load()
     documents = documents[: config.PDF_CONTENT_PAGES]
-    for doc in documents:  # add here
+    for doc in documents:
         doc.metadata["source"] = Path(doc.metadata["source"]).name
     print(f"Loaded {len(documents)} pages from {pdf_path.name}")
     return documents
