@@ -1,14 +1,30 @@
+#!/usr/bin/env python3
+
+"""
+Questions dataset pipeline
+
+Parses the 12-question ground truth evaluation set from
+data/test_questions.md and writes a structured JSON dataset to data/test_questions.json.
+
+Run once before evaluate.py, or re-run after modifying test_questions.md.
+
+Usage:
+    uv run python prepare_eval_dataset.py
+"""
+
 import json
 import re
 from pathlib import Path
 
 
 def parse_eval_dataset(input_path: str, output_path: str) -> None:
+    """Parse markdown questions and write structured JSON to output_path."""
     content = Path(input_path).read_text()
     blocks = content.split("## Q")[1:]
     results = []
 
     def extract(label, block):
+        """Extract a field value from a markdown question block."""
         pattern = rf"\*\*{label}:\*\*\s*(.+?)(?=\*\*|\Z)"
         match = re.search(pattern, block, re.DOTALL)
         return match.group(1).strip().replace("\n\n---", "").strip() if match else ""
