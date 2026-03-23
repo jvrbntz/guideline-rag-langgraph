@@ -30,3 +30,8 @@ OLLAMA_EMBED_MODEL = "nomic-embed-text"
 
 # LLM
 OLLAMA_MODEL = "llama3.1:8b"
+
+# Page index where non-clinical content begins (0-indexed).
+# For the ATS/IDSA 2019 CAP guideline, pages 16-22 are references
+# and committee disclosures. Document-specific — update if swapping PDFs.
+PDF_CONTENT_PAGES = 16
