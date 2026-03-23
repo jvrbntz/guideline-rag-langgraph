@@ -1,0 +1,74 @@
+[
+  {
+    "question_id": "Q1",
+    "faithfulness": 3,
+    "answer_relevance": 0.631219744682312,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q2",
+    "faithfulness": 3,
+    "answer_relevance": 0.8084131479263306,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q3",
+    "faithfulness": 3,
+    "answer_relevance": 0.5854464769363403,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q4",
+    "faithfulness": 3,
+    "answer_relevance": 0.6573293805122375,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q5",
+    "faithfulness": 3,
+    "answer_relevance": 0.14747443795204163,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q6",
+    "faithfulness": 3,
+    "answer_relevance": 0.43743398785591125,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q7",
+    "faithfulness": 3,
+    "answer_relevance": 0.7362583875656128,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q8",
+    "faithfulness": 3,
+    "answer_relevance": 0.6452857851982117,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q9",
+    "faithfulness": 3,
+    "answer_relevance": 0.6022422313690186,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q10",
+    "faithfulness": 3,
+    "answer_relevance": 0.7084947824478149,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q11",
+    "faithfulness": 3,
+    "answer_relevance": 0.6633411049842834,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q12",
+    "faithfulness": 3,
+    "answer_relevance": 0.8293728232383728,
+    "citation_present": true
+  }
+]

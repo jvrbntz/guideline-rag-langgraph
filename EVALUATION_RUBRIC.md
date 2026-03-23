@@ -50,3 +50,4 @@ Is the source document and page referenced in the answer? Without attribution, t
 - Faithfulness and Answer Relevance are scored by an LLM judge with no clinical training. Human review is required for any safety-critical use case.
 - An answer can score 3 on all three metrics and still be clinically wrong. This rubric measures output quality against the retrieved context, not clinical correctness.
 - Retrieval quality is not measured here — chunk-level recall and context relevance require ground truth labels that aren't available in V1. Deferred to V2.
+- Citation Present checks for existence only. It does not validate whether the cited source actually supports the answer. Citation correctness is deferred to V2.
