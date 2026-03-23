@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Query entrypoint for GuidelineGraph.
+Query entrypoint for guideline-rag-langgraph.
 
-Accepts a natural language clinical query, runs it through the
+Accepts a natural language guideline query, runs it through the
 RAG pipeline, and prints the referenced answer.
 
 Usage:
@@ -12,15 +12,15 @@ Usage:
 from graph.graph import guideline_graph
 
 
-def run_query(query: str) -> None:
-    """Run a query through the GuidelineGraph pipeline."""
-    print(f"\nQuery: {query}\n")
-
+def run_query(query: str) -> dict:
+    """Run a query through the guideline-rag-langgraph pipeline and return the result."""
     result = guideline_graph.invoke({"query": query})
 
-    print(f"Answer:\n{result['answer']}")
+    return result
 
 
 if __name__ == "__main__":
-    query = input("Enter your clinical query: ")
-    run_query(query)
+    query = input("Enter your guideline query: ")
+    result = run_query(query)
+    print(f"\nQuery: {query}\n")
+    print(f"Answer:\n{result['answer']}")
