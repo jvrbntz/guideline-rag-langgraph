@@ -163,7 +163,7 @@ Notably, macrolide monotherapy (azithromycin, clarithromycin) is no longer stron
 - Faithfulness judge leniency: all 12 questions scored 3/3, suggesting the local LLM judge model may be too permissive.
 - Answer relevance on complex queries: Q5 scored 0.15, the lowest in the eval set, consistent with naive chunking splitting multi-step clinical reasoning across chunk boundaries.
 - Answer relevance thresholds undefined: scores are raw floats with no defined pass/fail criteria. Threshold calibration is deferred to V2.
-- - Cross-referenced guidelines: Q6 requires information attributed to the 2016 ATS/IDSA HAP/VAP guidelines. Single-document scope means cross-references cannot be resolved. Grade 1 answer relevance on this question reflects a retrieval scope limitation, not a reasoning failure.
+- Cross-referenced guidelines: Q6 requires information attributed to the 2016 ATS/IDSA HAP/VAP guidelines. Single-document scope means cross-references cannot be resolved. Grade 1 answer relevance on this question reflects a retrieval scope limitation, not a reasoning failure.
 
 **Data and retrieval limitations:**
 
