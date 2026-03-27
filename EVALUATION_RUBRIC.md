@@ -30,7 +30,9 @@ Does the answer address the query? Partial answers that omit a key decision bran
 | ------- | ------------- |
 | 3 | Directly and completely addresses the query. |
 | 2 | Partially addresses the query but omits details necessary for a complete clinical response. |
-| 1 | Does not address the query. |
+| 1 | Does not address the query. |  
+
+Thresholds were set empirically based on V1 eval results and general cosine similarity conventions. They have not been statistically validated and should be recalibrated with a larger eval set in V2.
 
 ---
 

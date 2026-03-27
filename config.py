@@ -6,7 +6,6 @@ All tunable parameters, file paths, and model settings.
 
 from pathlib import Path
 
-
 # Paths
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
@@ -35,3 +34,7 @@ OLLAMA_MODEL = "llama3.1:8b"
 # For the ATS/IDSA 2019 CAP guideline, pages 16-22 are references
 # and committee disclosures. Document-specific — update if swapping PDFs.
 PDF_CONTENT_PAGES = 16
+
+# Answer relevance thresholds
+ANSWER_RELEVANCE_GOOD = 0.75
+ANSWER_RELEVANCE_ACCEPTABLE = 0.50

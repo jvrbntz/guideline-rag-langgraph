@@ -19,7 +19,12 @@ from pathlib import Path
 from langchain_ollama import ChatOllama
 from sentence_transformers import SentenceTransformer, util
 
-from config import OLLAMA_MODEL, PDF_FILENAME
+from config import (
+    ANSWER_RELEVANCE_ACCEPTABLE,
+    ANSWER_RELEVANCE_GOOD,
+    OLLAMA_MODEL,
+    PDF_FILENAME,
+)
 from query import run_query
 
 FAITHFULNESS_PROMPT = """
@@ -54,6 +59,16 @@ def score_answer_relevance(generated: str, expected: str) -> float:
     return float(util.cos_sim(embedding_generated, embedding_expected))
 
 
+def grade_answer_relevance(score: float) -> int:
+    """Convert cosine similarity score to 1-3 rubric scale."""
+    if score >= ANSWER_RELEVANCE_GOOD:
+        return 3
+    elif score >= ANSWER_RELEVANCE_ACCEPTABLE:
+        return 2
+    else:
+        return 1
+
+
 def score_faithfulness(answer: str, context: str) -> int:
     """Score faithfulness of generated answer against retrieved context using LLM judge."""
     llm = ChatOllama(model=OLLAMA_MODEL, temperature=0)
@@ -80,12 +95,16 @@ def run_evaluation(dataset_path: str, output_path: str) -> list:
         context = "\n\n".join(
             [doc.page_content for doc in result["filtered_documents"]]
         )
+        answer_relevance_score = score_answer_relevance(
+            answer, record["expected_answer"]
+        )
         eval_results.append(
             {
                 "question_id": record["question_id"],
                 "faithfulness": score_faithfulness(answer, context),
-                "answer_relevance": score_answer_relevance(
-                    answer, record["expected_answer"]
+                "answer_relevance_score": answer_relevance_score,
+                "answer_relevance_grade": grade_answer_relevance(
+                    answer_relevance_score
                 ),
                 "citation_present": check_citation(answer),
             }
