@@ -157,10 +157,12 @@ Notably, macrolide monotherapy (azithromycin, clarithromycin) is no longer stron
 
 **V1 scope limitations:**
 
-- No evaluation pipeline — system outputs are not systematically measured against ground truth answers. Evaluation is scoped to V2.
-- No agentic loop — V1 is a linear pipeline. If retrieved documents are poor quality, the system has no mechanism to retry with a rewritten query.
+- No agentic loop — V1 is a linear pipeline. If retrieved documents are poor quality, the system has no mechanism to retry with a rsewritten query.
 - No query classification — V1 does not validate whether a query is relevant to the CAP guideline before retrieval. Out-of-scope queries will attempt retrieval and may return misleading results.
 - No hallucination detection — V1 does not verify that generated answers are grounded in retrieved content. The LLM may produce responses that go beyond or contradict the source guideline.
+- Faithfulness judge leniency: all 12 questions scored 3/3, suggesting the local LLM judge model may be too permissive.
+- Answer relevance on complex queries: Q5 scored 0.15, the lowest in the eval set, consistent with naive chunking splitting multi-step clinical reasoning across chunk boundaries.
+- Answer relevance thresholds undefined: scores are raw floats with no defined pass/fail criteria. Threshold calibration is deferred to V2.
 
 **Data and retrieval limitations:**
 
