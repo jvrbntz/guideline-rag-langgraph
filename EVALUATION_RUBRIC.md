@@ -24,13 +24,13 @@ Does the answer stay within what the retrieved chunks actually say? Hallucinated
 
 ### Answer Relevance
 
-Does the answer address the query? Partial answers that omit a key decision branch — a dosing caveat, a severity distinction, a contraindication — score lower even if what's present is accurate.
+Answer Relevance measures the semantic alignment between a generated answer and the expected answer. A high cosine similarity score means the two are closely related in embedding space. It does not measure whether the answer completely addresses the clinical query.
 
 | Score | Description |
 | ------- | ------------- |
-| 3 | Directly and completely addresses the query. |
-| 2 | Partially addresses the query but omits details necessary for a complete clinical response. |
-| 1 | Does not address the query. |  
+| 3 | cosine sim ≥ 0.75 — high semantic overlap with reference answer |
+| 2 | cosine sim 0.50–0.74 — moderate overlap |
+| 1 | cosine sim < 0.50 — low overlap |  
 
 Thresholds were set empirically based on V1 eval results and general cosine similarity conventions. They have not been statistically validated and should be recalibrated with a larger eval set in V2.
 
