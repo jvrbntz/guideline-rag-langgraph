@@ -123,6 +123,35 @@ def main():
     print(f"\nEvaluation complete — {len(eval_results)} questions evaluated.")
     print(f"Results saved to {eval_output_path}")
 
+    # Answer relevance
+    score_list = [result["answer_relevance_score"] for result in eval_results]
+    avg_ans_rel = sum(score_list) / len(score_list)
+    min_ans_rel = min(score_list)
+    max_ans_rel = max(score_list)
+
+    grade_list = [result["answer_relevance_grade"] for result in eval_results]
+    grade_1 = grade_list.count(1)
+    grade_2 = grade_list.count(2)
+    grade_3 = grade_list.count(3)
+
+    # Faithfulness
+    faith_list = [result["faithfulness"] for result in eval_results]
+    faith_1 = faith_list.count(1)
+    faith_2 = faith_list.count(2)
+    faith_3 = faith_list.count(3)
+
+    # Citation present
+    citation_list = [result["citation_present"] for result in eval_results]
+    citation_count = citation_list.count(True)
+
+    # Print summary
+    print(f"\nFaithfulness:      1={faith_1}  2={faith_2}  3={faith_3}")
+    print(f"Answer Relevance:  1={grade_1}  2={grade_2}  3={grade_3}")
+    print(
+        f"Answer Relevance:  min={min_ans_rel:.2f}  max={max_ans_rel:.2f}  avg={avg_ans_rel:.2f}"
+    )
+    print(f"Citation Present:  {citation_count}/{len(eval_results)}")
+
 
 if __name__ == "__main__":
     main()
