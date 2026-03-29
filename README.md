@@ -121,8 +121,6 @@ uv run python query.py
 
 ## Example Output
 
----
-
 **Query:**
 What is the recommended empiric antibiotic for an otherwise healthy adult
 with CAP in the outpatient setting?
@@ -142,22 +140,45 @@ Notably, macrolide monotherapy (azithromycin, clarithromycin) is no longer stron
 - cap_guideline.pdf | Question 8 | Outpatient Antibiotic Treatment
 - cap_guideline.pdf | Table 3 | Initial Treatment Strategies for Outpatients
 
-## v2 Roadmap
+## Evaluation Results
+
+### Summary Findings
+
+Evaluation completed on 12 questions
+
+| Metric                    | Result                                    |
+| ------------------------- | ----------------------------------------- |
+| Faithfulness              | 12/12 grade 3                             |
+| Answer Relevance (grades) | grade 3: 2, grade 2: 8, grade 1: 2        |
+| Answer Relevance (scores) | avg 0.62, min 0.15, max 0.83              |
+| Citation Present          | 12/12                                     |
+
+12 questions evaluated across outpatient, nonsevere inpatient, and severe
+inpatient CAP settings. Faithfulness scored 3/3 across all questions —
+consistent with strong retrieval grounding, though local LLM judge leniency
+cannot be ruled out without manual cross-validation.
+
+Question 5 is a complex clinical query requiring multi-tiered context. Answer
+Relevance scored 0.15, indicating low semantic alignment. The generated answer
+was correct but incomplete, reflecting partial context caused by fixed-size
+chunking splitting a multi-part recommendation across chunk boundaries.
+
+Question 6 answer relevance (0.44) reflects two compounding factors: fixed-size
+chunking truncates the MRSA treatment chunk before linezolid is retrieved,
+and the complete dosing is attributed to the 2016 ATS/IDSA HAP/VAP guidelines
+via a table footnote — a cross-reference outside this document's scope.
+
+## V2 Roadmap
 
 - [ ] Self-correcting retrieval loop with query rewriting
-- [ ] Query classification and routing for out-of-scope queries
-- [ ] Hallucination grading node
 - [ ] Evaluate chunking strategies (recursive character → cluster semantic) and measure retrieval quality impact per strategy
-- [ ] Hybrid search: combine vector similarity with BM25 keyword matching for exact clinical term retrieval
-- [ ] Multi-document support (multiple guidelines)
 - [ ] Implement evaluation pipeline: retrieval recall, answer faithfulness, and semantic similarity scoring
-- [ ] Streamlit or FastAPI interface for easier demonstration
 
 ## Known Limitations
 
 **V1 scope limitations:**
 
-- No agentic loop — V1 is a linear pipeline. If retrieved documents are poor quality, the system has no mechanism to retry with a rsewritten query.
+- No agentic loop — V1 is a linear pipeline. If retrieved documents are poor quality, the system has no mechanism to retry with a rewritten query.
 - No query classification — V1 does not validate whether a query is relevant to the CAP guideline before retrieval. Out-of-scope queries will attempt retrieval and may return misleading results.
 - No hallucination detection — V1 does not verify that generated answers are grounded in retrieved content. The LLM may produce responses that go beyond or contradict the source guideline.
 - Faithfulness judge leniency: all 12 questions scored 3/3, suggesting the local LLM judge model may be too permissive.
