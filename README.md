@@ -35,17 +35,14 @@ This project is built as a stateful LangGraph graph where each step in the pipel
 
 ### V1 Graph (Implemented)
 
-A linear pipeline designed to ship a working system and establish the graph foundation for V2.
-
-```
-[query] -> [retrieve] -> [grade_documents] -> [generate] -> END
-```
+![GuidelineGraph Architecture](graph.png)
 
 ### V2 Graph (Planned)
 
 A self-correcting agentic loop. If retrieved documents are not relevant, the query is rewritten and retrieval is retried up to 3 times. Out-of-scope queries are caught at the classification step before retrieval is attempted.
 
 ```
+
 [query] -> [classify_query] ->
     if relevant: [retrieve] -> [grade_documents] ->
                        if relevant: [generate] -> [hallucination_check]-> END
