@@ -169,8 +169,8 @@ Section-aware chunking was investigated but deferred, PyPDF's multi-column extra
 
 ## V2 Roadmap
 
+- [x] Evaluate chunking strategies — tested CHUNK_SIZE=1024 CHUNK_OVERLAP=200; marginal overall improvement, Q6 improved, Q5 regressed due to context dilution
 - [ ] Self-correcting retrieval loop with query rewriting
-- [ ] Evaluate chunking strategies (recursive character → cluster semantic) and measure retrieval quality impact per strategy
 - [ ] Implement evaluation pipeline: retrieval recall, answer faithfulness, and semantic similarity scoring
 
 ## Known Limitations
