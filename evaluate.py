@@ -22,6 +22,7 @@ from sentence_transformers import SentenceTransformer, util
 from config import (
     ANSWER_RELEVANCE_ACCEPTABLE,
     ANSWER_RELEVANCE_GOOD,
+    EVAL_OUTPUT_PATH,
     OLLAMA_MODEL,
     PDF_FILENAME,
 )
@@ -117,7 +118,7 @@ def run_evaluation(dataset_path: str, output_path: str) -> list:
 def main():
     """Orchestrate the evaluation pipeline."""
     questions_dataset_path = "data/test_questions.json"
-    eval_output_path = "data/eval_results.json"
+    eval_output_path = EVAL_OUTPUT_PATH
     eval_results = run_evaluation(questions_dataset_path, eval_output_path)
 
     print(f"\nEvaluation complete — {len(eval_results)} questions evaluated.")

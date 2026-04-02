@@ -152,20 +152,20 @@ Evaluation completed on 12 questions
 | Answer Relevance (scores) | avg 0.62, min 0.15, max 0.83              |
 | Citation Present          | 12/12                                     |
 
-12 questions evaluated across outpatient, nonsevere inpatient, and severe
-inpatient CAP settings. Faithfulness scored 3/3 across all questions —
-consistent with strong retrieval grounding, though local LLM judge leniency
-cannot be ruled out without manual cross-validation.
+12 questions evaluated across outpatient, nonsevere inpatient, and severe inpatient CAP settings. Faithfulness scored 3/3 across all questions —
+consistent with strong retrieval grounding, though local LLM judge leniency cannot be ruled out without manual cross-validation.
 
-Question 5 is a complex clinical query requiring multi-tiered context. Answer
-Relevance scored 0.15, indicating low semantic alignment. The generated answer
-was correct but incomplete, reflecting partial context caused by fixed-size
-chunking splitting a multi-part recommendation across chunk boundaries.
+Question 5 is a complex clinical query requiring multi-tiered context. Answer Relevance scored 0.15, indicating low semantic alignment. The generated answer was correct but incomplete, reflecting partial context caused by fixed-size chunking splitting a multi-part recommendation across chunk boundaries.
 
-Question 6 answer relevance (0.44) reflects two compounding factors: fixed-size
-chunking truncates the MRSA treatment chunk before linezolid is retrieved,
-and the complete dosing is attributed to the 2016 ATS/IDSA HAP/VAP guidelines
-via a table footnote — a cross-reference outside this document's scope.
+Question 6 answer relevance (0.44) reflects two compounding factors: fixed-size chunking truncates the MRSA treatment chunk before linezolid is retrieved, and the complete dosing is attributed to the 2016 ATS/IDSA HAP/VAP guidelines via a table footnote — a cross-reference outside this document's scope.
+
+### V2 Findings (Chunk Size 1024, Overlap 200)
+
+Chunk size increased from 512 to 1024 and overlap from 50 to 200. Answer Relevance average improved marginally from 0.62 to 0.64. Grade distribution improved: grade 1 decreased from 2 to 1, grade 3 increased from 2 to 3.
+
+Question 5 scored 0.10, worse than V1 (0.15). Question 5 kept 5/5 retrieved chunks after grading, larger chunks passed more context to the LLM, diluting the two-tier MRSA structure the answer requires. Question 6 improved from 0.44 to 0.56, upgrading from grade 1 to grade 2.
+
+Section-aware chunking was investigated but deferred, PyPDF's multi-column extraction produces inconsistent text ordering, making regex-based section splitting unreliable.
 
 ## V2 Roadmap
 

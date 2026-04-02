@@ -15,8 +15,13 @@ CHROMA_DB_PATH = BASE_DIR / "vector_store" / "chroma_db"
 PDF_FILENAME = "metlay-et-al-2019-diagnosis-and-treatment-of-adults-with-community-acquired-pneumonia-an-official-clinical-practice.pdf"
 
 # Chunking
-CHUNK_SIZE = 512
-CHUNK_OVERLAP = 50
+# V1: CHUNK_SIZE=512, CHUNK_OVERLAP=50 — caused mid-sentence splits on multi-part recommendations (Q5, Q6)
+# V2: increased to reduce boundary splits
+CHUNK_SIZE = 1024
+CHUNK_OVERLAP = 200
+
+# Eval output
+EVAL_OUTPUT_PATH = "data/eval_results_v2_chunk1024.json"
 
 # Retrieval
 RETRIEVAL_K = 5

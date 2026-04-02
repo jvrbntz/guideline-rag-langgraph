@@ -1,0 +1,86 @@
+[
+  {
+    "question_id": "Q1",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.5677384734153748,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q2",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.7876981496810913,
+    "answer_relevance_grade": 3,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q3",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.6962567567825317,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q4",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.6333078145980835,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q5",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.09532250463962555,
+    "answer_relevance_grade": 1,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q6",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.558535635471344,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q7",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.7686041593551636,
+    "answer_relevance_grade": 3,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q8",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.7233153581619263,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q9",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.6763280034065247,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q10",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.739620566368103,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q11",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.6296749711036682,
+    "answer_relevance_grade": 2,
+    "citation_present": true
+  },
+  {
+    "question_id": "Q12",
+    "faithfulness": 3,
+    "answer_relevance_score": 0.8138600587844849,
+    "answer_relevance_grade": 3,
+    "citation_present": true
+  }
+]
