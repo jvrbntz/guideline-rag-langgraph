@@ -20,7 +20,10 @@ def run_query(query: str) -> dict:
 
 
 if __name__ == "__main__":
-    query = input("Enter your guideline query: ")
+    query = input("Enter your clinical guideline query: ")
     result = run_query(query)
     print(f"\nQuery: {query}\n")
-    print(f"Answer:\n{result['answer']}")
+    if result.get("answer"):
+        print(f"Answer:\n{result['answer']}")
+    else:
+        print("This query is outside the scope of the ATS/IDSA 2019 CAP guideline.")

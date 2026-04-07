@@ -25,9 +25,20 @@ class RelevanceGrade(BaseModel):
     reasoning: str = Field(description="Concise explanation of relevance decision.")
 
 
+class ScopeGrade(BaseModel):
+    """Scope classification for a user query."""
+
+    in_scope: Literal["yes", "no"] = Field(
+        description="Is this query within scope of the ATS/IDSA 2019 CAP guideline?"
+    )
+
+    reasoning: str = Field(description="Concise explanation of scope decision.")
+
+
 _vector_store = None
 _grading_chain = None
 _generation_chain = None
+_classification_chain = None
 
 
 def _get_vector_store() -> Chroma:
@@ -48,6 +59,16 @@ def _get_grading_chain():
         llm = ChatOllama(model=config.OLLAMA_MODEL, temperature=0)
         _grading_chain = grading_prompt | llm.with_structured_output(RelevanceGrade)
     return _grading_chain
+
+
+def _get_classification_chain():
+    global _classification_chain
+    if _classification_chain is None:
+        llm = ChatOllama(model=config.OLLAMA_MODEL, temperature=0)
+        _classification_chain = classification_prompt | llm.with_structured_output(
+            ScopeGrade
+        )
+    return _classification_chain
 
 
 def _get_generation_chain():
@@ -94,6 +115,32 @@ generation_prompt = ChatPromptTemplate.from_template(
     """
 )
 
+classification_prompt = ChatPromptTemplate.from_template(
+    """
+    You are evaluating whether a clinical query is within the scope of the ATS/IDSA 2019 Community-Acquired Pneumonia guideline for adult patients.
+
+    In scope:
+    - Adult patients
+    - Antibiotic selection, dosing, duration, administration route
+    - Site of care: ICU, outpatient, inpatient
+    - Diagnostic testing recommendations
+
+    Out of scope:
+    - Pediatric patients
+    - Non-CAP respiratory infections
+    - Unrelated clinical topics 
+    - Hospital-acquired pneumonia
+    - Pregnant patients
+
+    Query: {query}
+
+    Instructions:
+    - Mark "yes" if the query falls within the scope above.
+    - Mark "no" if the query is outside the scope above. 
+    - Provide concise and clear reasoning for your decision.
+    """
+)
+
 
 def retrieve(state: GraphState) -> dict:
     """
@@ -129,6 +176,20 @@ def grade_documents(state: GraphState) -> dict:
 
     print(f"Kept {len(filtered_documents)}/{len(documents)} documents after grading.")
     return {"filtered_documents": filtered_documents}
+
+
+def classify_query(state: GraphState) -> dict:
+    """
+    Classify whether the query is within scope of the CAP guideline.
+
+    Reads:  state["query"]
+    Writes: state["query_scope"]
+    """
+    query = state["query"]
+
+    result = _get_classification_chain().invoke({"query": query})
+
+    return {"query_scope": result.in_scope}
 
 
 def generate(state: GraphState) -> dict:

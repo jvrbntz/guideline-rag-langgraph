@@ -13,3 +13,10 @@ def route_after_grading(state: GraphState) -> str:
     if state["filtered_documents"]:
         return "generate"
     return "end"
+
+
+def route_after_classification(state: GraphState) -> str:
+    """Route after classifying the query whether it's within scope."""
+    if state["query_scope"] == "yes":
+        return "retrieve"
+    return "end"
