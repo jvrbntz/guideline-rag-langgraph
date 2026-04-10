@@ -18,4 +18,4 @@ class GraphState(TypedDict):
     answer: str  # final generated response
     rewrite_count: int  # number of query rewrites attempted
     rewritten_query: str  # rewritten query for retry retrieval
-    query_scope: str
+    query_scope: str  # classification result: "yes" or "no"

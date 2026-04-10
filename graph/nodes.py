@@ -169,6 +169,20 @@ rewrite_prompt = ChatPromptTemplate.from_template(
 )
 
 
+def classify_query(state: GraphState) -> dict:
+    """
+    Classify whether the query is within scope of the CAP guideline.
+
+    Reads:  state["query"]
+    Writes: state["query_scope"]
+    """
+    query = state["query"]
+
+    result = _get_classification_chain().invoke({"query": query})
+
+    return {"query_scope": result.in_scope}
+
+
 def retrieve(state: GraphState) -> dict:
     """
     Retrieve relevant chunks from ChromaDB based on the query.
@@ -176,7 +190,8 @@ def retrieve(state: GraphState) -> dict:
     Reads:  state["query"], state["rewrite_query"]
     Writes: state["documents"]
     """
-    query = state["rewritten_query"] or state["query"]
+    query = state.get("rewritten_query") or state["query"]
+
     retrieved_docs = _get_vector_store().similarity_search(query, k=config.RETRIEVAL_K)
 
     return {"documents": retrieved_docs}
@@ -202,21 +217,8 @@ def grade_documents(state: GraphState) -> dict:
             filtered_documents.append(doc)
 
     print(f"Kept {len(filtered_documents)}/{len(documents)} documents after grading.")
+
     return {"filtered_documents": filtered_documents}
-
-
-def classify_query(state: GraphState) -> dict:
-    """
-    Classify whether the query is within scope of the CAP guideline.
-
-    Reads:  state["query"]
-    Writes: state["query_scope"]
-    """
-    query = state["query"]
-
-    result = _get_classification_chain().invoke({"query": query})
-
-    return {"query_scope": result.in_scope}
 
 
 def rewrite_query(state: GraphState) -> dict:
@@ -227,10 +229,13 @@ def rewrite_query(state: GraphState) -> dict:
 
     Returns: state["rewritten_query"], state["rewrite_count"]
     """
-    query = state["rewritten_query"] or state["query"]
-    count = state["rewrite_count"]
+    query = state.get("rewritten_query") or state["query"]
+    count = state.get("rewrite_count") or 0
 
     response = _get_rewrite_chain().invoke({"query": query})
+
+    print(f"Rewriting query (attempt {count + 1}): {query}")  # for testing purposes
+    print(f"Rewritten to: {response.content}")  # for testing purposes
 
     return {"rewritten_query": response.content, "rewrite_count": count + 1}
 
