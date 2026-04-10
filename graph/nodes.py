@@ -2,7 +2,7 @@
 Node functions for the GuidelineGraph pipeline.
 
 Each node reads from and writes to the shared GraphState object.
-Nodes: retrieve, grade_documents, generate
+Nodes: retrieve, grade_documents, generate, classify_query, rewrite_query
 """
 
 from typing import Literal
@@ -39,6 +39,7 @@ _vector_store = None
 _grading_chain = None
 _generation_chain = None
 _classification_chain = None
+_rewrite_chain = None
 
 
 def _get_vector_store() -> Chroma:
@@ -79,6 +80,14 @@ def _get_generation_chain():
     return _generation_chain
 
 
+def _get_rewrite_chain():
+    global _rewrite_chain
+    if _rewrite_chain is None:
+        llm = ChatOllama(model=config.OLLAMA_MODEL, temperature=0)
+        _rewrite_chain = rewrite_prompt | llm
+    return _rewrite_chain
+
+
 grading_prompt = ChatPromptTemplate.from_template(
     """
     You are an expert in evaluating retrieved document for relevance to a user clinical query.
@@ -105,6 +114,9 @@ generation_prompt = ChatPromptTemplate.from_template(
     If the excerpts do not contain enough information, say so clearly.
     Always note the evidence strength (Strong/Conditional) where present.
     Do not recommend treatment for real patients.
+
+    Instructons:
+    - Return only the answer, do not add unnecessary commentaries. 
 
     Guideline excerpts:
     {context}
@@ -141,15 +153,30 @@ classification_prompt = ChatPromptTemplate.from_template(
     """
 )
 
+rewrite_prompt = ChatPromptTemplate.from_template(
+    """
+    You are improving a clinical query to retrieve better results from the ATS/IDSA 2019 CAP guideline.
+    Rephrase the query to be more specific or use different clinical terminology.
+    Do not add new clinical meaning, stay true to the original intent. 
+
+    Instructions: 
+    - Return only the rewritten query, no explanation or commentary.
+
+    Query: {query}
+
+    Rewritten query:
+    """
+)
+
 
 def retrieve(state: GraphState) -> dict:
     """
     Retrieve relevant chunks from ChromaDB based on the query.
 
-    Reads:  state["query"]
+    Reads:  state["query"], state["rewrite_query"]
     Writes: state["documents"]
     """
-    query = state["query"]
+    query = state["rewritten_query"] or state["query"]
     retrieved_docs = _get_vector_store().similarity_search(query, k=config.RETRIEVAL_K)
 
     return {"documents": retrieved_docs}
@@ -190,6 +217,22 @@ def classify_query(state: GraphState) -> dict:
     result = _get_classification_chain().invoke({"query": query})
 
     return {"query_scope": result.in_scope}
+
+
+def rewrite_query(state: GraphState) -> dict:
+    """
+    Rewrites a more specific and relevant clinical query compared to the user's query.
+
+    Reads: state["query"], state["rewritten_query"], state["rewrite_count"]
+
+    Returns: state["rewritten_query"], state["rewrite_count"]
+    """
+    query = state["rewritten_query"] or state["query"]
+    count = state["rewrite_count"]
+
+    response = _get_rewrite_chain().invoke({"query": query})
+
+    return {"rewritten_query": response.content, "rewrite_count": count + 1}
 
 
 def generate(state: GraphState) -> dict:

@@ -12,7 +12,10 @@ def route_after_grading(state: GraphState) -> str:
     """Route after grading — proceed to generate or end if no relevant docs found."""
     if state["filtered_documents"]:
         return "generate"
-    return "end"
+    elif state["rewrite_count"] < 3:
+        return "rewrite_query"
+    else:
+        return "end"
 
 
 def route_after_classification(state: GraphState) -> str:

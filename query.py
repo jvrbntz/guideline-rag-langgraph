@@ -14,7 +14,9 @@ from graph.graph import guideline_graph
 
 def run_query(query: str) -> dict:
     """Run a query through the guideline-rag-langgraph pipeline and return the result."""
-    result = guideline_graph.invoke({"query": query})
+    result = guideline_graph.invoke(
+        {"query": query, "rewritten_query": "", "rewrite_count": 0}
+    )
 
     return result
 
@@ -25,5 +27,7 @@ if __name__ == "__main__":
     print(f"\nQuery: {query}\n")
     if result.get("answer"):
         print(f"Answer:\n{result['answer']}")
-    else:
+    elif result.get("query_scope") == "no":
         print("This query is outside the scope of the ATS/IDSA 2019 CAP guideline.")
+    else:
+        print("No relevant guideline found after 3 query rewrites.")
