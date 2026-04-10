@@ -51,16 +51,27 @@ To generate: `uv run python generate_graph.py`
 
 ```
 guideline-rag-langgraph/
-├── config.py          # all settings: chunk size, model names, paths
-├── ingest.py          # PDF → chunks → embeddings → ChromaDB
-├── query.py           # entrypoint: query → graph → answer + citations
+├── config.py                  # all settings: chunk size, model names, paths
+├── ingest.py                  # PDF → chunks → embeddings → ChromaDB
+├── query.py                   # entrypoint: query → graph → answer + citations
+├── evaluate.py                # evaluation pipeline: faithfulness, answer relevance, citation
+├── prepare_eval_dataset.py    # converts test_questions.md → test_questions.json
+├── generate_graph.py          # generates LangGraph pipeline visualization
 ├── graph/
-│   ├── state.py       # GraphState TypedDict — shared state between nodes
-│   ├── nodes.py       # retrieve, grade_documents, generate
-│   ├── edges.py       # conditional routing logic (stubbed for V2)
-│   └── graph.py       # assembles and compiles the LangGraph graph
-└── data/
-    └── README.md      # instructions for obtaining the source PDF
+│   ├── state.py               # GraphState TypedDict — shared state between nodes
+│   ├── nodes.py               # classify_query, rewrite_query, retrieve, grade_documents, generate
+│   ├── edges.py               # conditional routing: classification and grading
+│   └── graph.py               # assembles and compiles the LangGraph graph
+├── data/
+│   ├── README.md              # instructions for obtaining the source PDF
+│   ├── test_questions.md      # 12-question ground truth evaluation set
+│   ├── test_questions.json    # generated from test_questions.md
+│   ├── eval_results.json      # V1 evaluation results
+│   └── eval_results_v2_chunk1024.json  # V2 chunking experiment results
+├── docs/
+│   ├── graph_v1.png           # V1 pipeline visualization
+│   └── graph_v2.png           # V2 pipeline visualization
+└── EVALUATION_RUBRIC.md       # scoring criteria for eval pipeline
 ```
 
 ## Evaluation
