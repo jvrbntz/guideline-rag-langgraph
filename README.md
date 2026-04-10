@@ -35,22 +35,17 @@ This project is built as a stateful LangGraph graph where each step in the pipel
 
 ### V1 Graph (Implemented)
 
-![GuidelineGraph Architecture](graph.png)
+A linear pipeline: retrieve, grade, generate
 
-To generate: `uv run python generate_graph.py`
+![V1 GuidelineGraph Architecture](docs/graph_v1.png)
 
-### V2 Graph (Planned)
+### V2 Graph (Implemented)
 
-A self-correcting agentic loop. If retrieved documents are not relevant, the query is rewritten and retrieval is retried up to 3 times. Out-of-scope queries are caught at the classification step before retrieval is attempted.
+A self-correcting agentic loop. Out-of-scope queries are caught at classification before retrieval is attempted. If retrieved documents fail grading, the query is rewritten and retrieval is retried up to 3 times.
 
-```
+![V2 GuidelineGraph Architecture](docs/graph_v2.png)
 
-[query] -> [classify_query] ->
-    if relevant: [retrieve] -> [grade_documents] ->
-                       if relevant: [generate] -> [hallucination_check]-> END
-                       if not: [rewrite_query] -> [retrieve] (max iterations)
-    if irrelevant: END ("Query is outside the scope of this guideline")
-```
+To generate: `uv run python generate_graph.py` 
 
 ### Graph Visualization
 
@@ -170,7 +165,7 @@ Section-aware chunking was investigated but deferred, PyPDF's multi-column extra
 ## V2 Roadmap
 
 - [x] Evaluate chunking strategies — tested CHUNK_SIZE=1024 CHUNK_OVERLAP=200; marginal overall improvement, Q6 improved, Q5 regressed due to context dilution
-- [ ] Self-correcting retrieval loop with query rewriting
+- [x] Self-correcting retrieval loop with query rewriting
 - [ ] Implement evaluation pipeline: retrieval recall, answer faithfulness, and semantic similarity scoring
 
 ## Known Limitations
