@@ -14,6 +14,9 @@ from pydantic import BaseModel, Field
 
 import config
 from graph.state import GraphState
+from logger import get_logger
+
+logger = get_logger(__name__)
 
 
 class RelevanceGrade(BaseModel):
@@ -180,6 +183,8 @@ def classify_query(state: GraphState) -> dict:
 
     result = _get_classification_chain().invoke({"query": query})
 
+    logger.info(f"classify_query: '{query}' -> in_scope={result.in_scope}")
+
     return {"query_scope": result.in_scope}
 
 
@@ -193,6 +198,8 @@ def retrieve(state: GraphState) -> dict:
     query = state.get("rewritten_query") or state["query"]
 
     retrieved_docs = _get_vector_store().similarity_search(query, k=config.RETRIEVAL_K)
+
+    logger.info(f"retrieve: '{query}' -> retrieved {len(retrieved_docs)} chunks")
 
     return {"documents": retrieved_docs}
 
@@ -213,10 +220,15 @@ def grade_documents(state: GraphState) -> dict:
         grade = _get_grading_chain().invoke(
             {"query": query, "document": doc.page_content}
         )
+        logger.debug(
+            f"grade_documents: chunk graded {grade.relevant} — {grade.reasoning}"
+        )
         if grade.relevant == "yes":
             filtered_documents.append(doc)
 
-    print(f"Kept {len(filtered_documents)}/{len(documents)} documents after grading.")
+    logger.info(
+        f"grade_documents: kept {len(filtered_documents)}/{len(documents)} chunks"
+    )
 
     return {"filtered_documents": filtered_documents}
 
@@ -234,8 +246,9 @@ def rewrite_query(state: GraphState) -> dict:
 
     response = _get_rewrite_chain().invoke({"query": query})
 
-    print(f"Rewriting query (attempt {count + 1}): {query}")  # for testing purposes
-    print(f"Rewritten to: {response.content}")  # for testing purposes
+    logger.info(
+        f"rewrite_query: attempt {count + 1} | original: '{state.get('query')}' → rewritten: '{response.content.strip()}'"
+    )
 
     return {"rewritten_query": response.content, "rewrite_count": count + 1}
 
@@ -251,25 +264,24 @@ def generate(state: GraphState) -> dict:
 
     if filtered_docs:
         context_parts = []
-        for doc in filtered_docs:
-            source = doc.metadata.get("source", "unknown")
-            page = doc.metadata.get("page", "unknown")
-            context_parts.append(f"[Page {page} | {source}]\n{doc.page_content}")
-        context_text = "\n\n".join(context_parts)
-    else:
-        context_text = "No relevant guideline excerpts found for this query."
-
-    response = _get_generation_chain().invoke({"query": query, "context": context_text})
-
-    if filtered_docs:
         sources = []
         for doc in filtered_docs:
             source = doc.metadata.get("source", "unknown")
             page = doc.metadata.get("page", "unknown")
+            context_parts.append(f"[Page {page} | {source}]\n{doc.page_content}")
             sources.append(f"- {source} | Page {page}")
+        context_text = "\n\n".join(context_parts)
         sources_text = "\n".join(sources)
+    else:
+        context_text = "No relevant guideline excerpts found for this query."
+
+    logger.info(f"generate: generating answer from {len(filtered_docs)} chunks")
+    response = _get_generation_chain().invoke({"query": query, "context": context_text})
+
+    if filtered_docs:
         answer_with_sources = f"{response.content}\n\nSources:\n{sources_text}"
     else:
         answer_with_sources = response.content
 
+    logger.info("generate: answer generated successfully")
     return {"answer": answer_with_sources}

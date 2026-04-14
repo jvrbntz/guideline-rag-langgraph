@@ -10,14 +10,18 @@ Usage:
 """
 
 from graph.graph import guideline_graph
+from logger import get_logger
+
+logger = get_logger(__name__)
 
 
 def run_query(query: str) -> dict:
     """Run a query through the guideline-rag-langgraph pipeline and return the result."""
+    logger.info(f"query received: '{query}'")
     result = guideline_graph.invoke(
         {"query": query, "rewritten_query": "", "rewrite_count": 0}
     )
-
+    logger.info("query completed")
     return result
 
 
