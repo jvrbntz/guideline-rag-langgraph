@@ -57,6 +57,7 @@ guideline-rag-langgraph/
 ├── evaluate.py                # evaluation pipeline: faithfulness, answer relevance, citation
 ├── prepare_eval_dataset.py    # converts test_questions.md → test_questions.json
 ├── generate_graph.py          # generates LangGraph pipeline visualization
+├── logger.py                  # logging configuration — get_logger(__name__) for each module
 ├── graph/
 │   ├── state.py               # GraphState TypedDict — shared state between nodes
 │   ├── nodes.py               # classify_query, rewrite_query, retrieve, grade_documents, generate
@@ -89,6 +90,7 @@ V1 includes a 12-question evaluation set covering queries across outpatient, non
 | PDF extraction        | pypdf                 | Open-source license, sufficient for structured PDF text extraction at V1 scope                          |
 | Dependency management | uv                    | Fast, modern Python package manager with deterministic lockfile — reproducible installs across machines |
 | LLM backend           | Ollama                | Local, private, cost-free inference — no API key required. OpenAI backend support planned for V2.       |
+| Logging               | Python logging module | Structured audit trail for pipeline decisions — configurable via LOG_LEVEL environment variable         |
 
 ## How to Run
 
