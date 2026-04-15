@@ -2,8 +2,8 @@
 """
 Logging configuration
 
-Provides a configured logger for each module in the pipeline.
-Import and call get_logger(__name__) at the top of each module
+Provides a named logger for each module in the pipeline.
+Logging is configured once at application entry points.
 
 Usage:
     from logger import get_logger
@@ -14,18 +14,5 @@ import logging
 
 
 def get_logger(name: str) -> logging.Logger:
-    """Return a configured logger for the given module."""
-    logger = logging.getLogger(name)
-
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-        )
-
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
-
-    return logger
+    """Return a named logger for the given module."""
+    return logging.getLogger(name)

@@ -14,6 +14,7 @@ Usage:
 """
 
 import json
+import logging
 from pathlib import Path
 
 from langchain_ollama import ChatOllama
@@ -23,10 +24,24 @@ from config import (
     ANSWER_RELEVANCE_ACCEPTABLE,
     ANSWER_RELEVANCE_GOOD,
     EVAL_OUTPUT_PATH,
+    LOG_LEVEL,
     OLLAMA_MODEL,
     PDF_FILENAME,
 )
+from logger import get_logger
 from query import run_query
+
+logging.basicConfig(
+    level=getattr(logging, LOG_LEVEL),
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("chromadb").setLevel(logging.WARNING)
+
+logger = get_logger(__name__)
 
 FAITHFULNESS_PROMPT = """
 You are evaluating the faithfulness between an LLM-generated answer and a retrieved context.
@@ -79,8 +94,8 @@ def score_faithfulness(answer: str, context: str) -> int:
         result = json.loads(response.content)
         return int(result["score"])
     except (json.JSONDecodeError, KeyError):
-        print(
-            f"Warning: could not parse faithfulness score. Raw response: {response.content}"
+        logger.warning(
+            f"score_faithfulness: could not parse score. Raw response: {response.content}"
         )
         return 0
 
@@ -90,7 +105,7 @@ def run_evaluation(dataset_path: str, output_path: str) -> list:
     eval_results = []
     test_questions = json.loads(Path(dataset_path).read_text())
     for record in test_questions:
-        print(f"Evaluating {record['question_id']}...")
+        logger.info(f"run_evaluation: evaluating {record['question_id']}...")
         result = run_query(record["question"])
         answer = result["answer"]
         context = "\n\n".join(

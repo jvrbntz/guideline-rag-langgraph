@@ -9,8 +9,21 @@ Usage:
     uv run python query.py
 """
 
+import logging
+
+import config
 from graph.graph import guideline_graph
 from logger import get_logger
+
+logging.basicConfig(
+    level=getattr(logging, config.LOG_LEVEL),
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("chromadb").setLevel(logging.WARNING)
 
 logger = get_logger(__name__)
 

@@ -273,6 +273,9 @@ def generate(state: GraphState) -> dict:
         context_text = "\n\n".join(context_parts)
         sources_text = "\n".join(sources)
     else:
+        logger.warning(
+            "generate: no relevant chunks available — generating answer without context"
+        )
         context_text = "No relevant guideline excerpts found for this query."
 
     logger.info(f"generate: generating answer from {len(filtered_docs)} chunks")

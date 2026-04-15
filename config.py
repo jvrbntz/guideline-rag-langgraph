@@ -4,6 +4,7 @@ Configuration settings.
 All tunable parameters, file paths, and model settings.
 """
 
+import os
 from pathlib import Path
 
 # Paths
@@ -43,3 +44,6 @@ PDF_CONTENT_PAGES = 16
 # Answer relevance thresholds
 ANSWER_RELEVANCE_GOOD = 0.75
 ANSWER_RELEVANCE_ACCEPTABLE = 0.50
+
+# Logging
+LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")

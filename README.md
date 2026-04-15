@@ -1,6 +1,6 @@
 # Clinical Guideline RAG LangGraph
 
-> ✅ **Status:** V1 complete. Linear RAG pipeline fully operational.
+> ✅ **Status:** V2 in progress
 
 Clinical guidelines are long, dense, and hard to query quickly when you need a specific answer. This project addresses this by letting you ask natural language questions against a clinical guideline and get referenced, evidence-backed responses in seconds.
 
