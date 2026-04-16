@@ -29,6 +29,8 @@ I used AI assistance throughout this project — as a thinking partner for archi
 
 ## Architecture
 
+V2 implements a self-correcting RAG pipeline with conditional routing. The system classifies queries for scope, grades retrieval quality, and rewrites failed queries up to 3 times before giving up. Routing decisions are explicit and auditable in `edges.py`. This design prioritizes predictability and transperancy, important properties for a clinical context.
+
 LangGraph facilitates building, debugging, and extending complex agentic pipelines via structured state management, standardized node interfaces, and observable execution paths.
 
 This project is built as a stateful LangGraph graph where each step in the pipeline is an isolated, testable node connected by explicit edges. All data flows through a shared state object passed automatically between nodes.
