@@ -93,7 +93,7 @@ def _get_rewrite_chain():
 
 grading_prompt = ChatPromptTemplate.from_template(
     """
-    You are an expert in evaluating retrieved document for relevance to a user clinical query.
+    You are an expert in evaluating a retrieved document for relevance to a user clinical query.
     
     Query: {query}
     Document: {document}
@@ -118,7 +118,7 @@ generation_prompt = ChatPromptTemplate.from_template(
     Always note the evidence strength (Strong/Conditional) where present.
     Do not recommend treatment for real patients.
 
-    Instructons:
+    Instructions:
     - Return only the answer, do not add unnecessary commentaries. 
 
     Guideline excerpts:
