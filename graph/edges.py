@@ -14,10 +14,9 @@ logger = get_logger(__name__)
 
 def route_after_classification(state: GraphState) -> str:
     """Route after classifying the query whether it's within scope."""
-    route = "retrieve" if state["query_scope"] == "yes" else "end"
-    logger.info(
-        f"route_after_classification: query_scope={state['query_scope']} → {route}"
-    )
+    query_scope = state.get("query_scope")
+    route = "retrieve" if query_scope == "yes" else "end"
+    logger.info(f"route_after_classification: query_scope={query_scope} → {route}")
     return route
 
 
